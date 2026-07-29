@@ -6,7 +6,7 @@ import { Download, ShieldCheck, Smartphone, Users, Sparkles, CheckCircle2, Zap, 
 
 export default function Home() {
   const [lang, setLang] = useState<'en' | 'ar'>('ar');
-  const [downloads, setDownloads] = useState<number>(573);
+  const [downloads, setDownloads] = useState<number>(4517);
   const [liveVisitors, setLiveVisitors] = useState<number>(24);
   const [showDownloadModal, setShowDownloadModal] = useState<boolean>(false);
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
@@ -14,21 +14,21 @@ export default function Home() {
   const isAr = lang === 'ar';
 
   useEffect(() => {
-    // Fixed launch reference timestamp
-    const launchDate = new Date('2026-07-20T00:00:00Z').getTime();
+    // Reference start date set to today (July 29, 2026)
+    const launchDate = new Date('2026-07-29T00:00:00Z').getTime();
 
     const calculateMetrics = () => {
       const now = new Date().getTime();
-      const hoursPassed = Math.max(0, Math.floor((now - launchDate) / (1000 * 60 * 60)));
-      
-      // Start at 573 and add 17 every hour
-      setDownloads(573 + (hoursPassed * 17));
+      const daysPassed = Math.max(0, Math.floor((now - launchDate) / (1000 * 60 * 60 * 24)));
+
+      // Baseline of 4517 + 5 every full 24 hours
+      setDownloads(4517 + (daysPassed * 5));
     };
 
     calculateMetrics();
-    const downloadInterval = setInterval(calculateMetrics, 60000); // Check every minute for new hours
+    const downloadInterval = setInterval(calculateMetrics, 60000); // Check every minute for 24h boundary
 
-    // Change visitors between 9 and 148 every single second (1000ms)
+    // Live visitor generator (between 9 and 148)
     const visitorInterval = setInterval(() => {
       const randomVisitors = Math.floor(Math.random() * (148 - 9 + 1)) + 9;
       setLiveVisitors(randomVisitors);
@@ -46,7 +46,7 @@ export default function Home() {
       const apkUrl = "https://github.com/Younesouani/Quran-App/releases/download/V3.0.1/application-ecf828ab-e19e-4a1c-a14d-2cfc4bf0349c.apk";
       const response = await fetch(apkUrl);
       const blob = await response.blob();
-      
+
       const blobUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = blobUrl;
